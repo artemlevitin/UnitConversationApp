@@ -2,25 +2,27 @@ package com.company;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
-
+        ArrayList<ConverList> base = new ArrayList<ConverList>();
     }
 
-    static public List<String> readFile(String filePath) {
+    static public byte[] readFile(String filePath) {
         try {
-            return Files.readAllLines(Paths.get(filePath));
-
+            byte[] buff = Files.readAllBytes(Paths.get(filePath));
+            return buff;
         } catch (Exception exc) {
             System.out.println(exc.getMessage());
             return null;
         }
     }
 
-    static public void parser (List<String> input) {
-    }
+    static public void parser (byte [] input){
+
+
+     }
 
 }
