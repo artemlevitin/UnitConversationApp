@@ -1,28 +1,21 @@
 package com.company;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import com.company.ConverDBase.DBase;
+import com.company.Handler.Handlers;
+
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        ArrayList<ConverList> base = new ArrayList<ConverList>();
+        DBase dBase = new DBase();
+        List<String> lst =Handlers.readFile("inpData.txt");
+        Handlers.inputData(lst,dBase);
+
     }
 
-    static public byte[] readFile(String filePath) {
-        try {
-            byte[] buff = Files.readAllBytes(Paths.get(filePath));
-            return buff;
-        } catch (Exception exc) {
-            System.out.println(exc.getMessage());
-            return null;
-        }
-    }
-
-    static public void parser (byte [] input){
 
 
-     }
+
 
 }
