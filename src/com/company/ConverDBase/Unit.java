@@ -20,4 +20,17 @@ public class Unit {
     public void setVal(double val) {
         this.val = val;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean sameSame = false;
+
+        if (object != null && object instanceof Unit)
+        {
+            sameSame = this.name.equals(((Unit) object).name);
+        }
+
+        return sameSame;
+    }
 }

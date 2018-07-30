@@ -10,7 +10,8 @@ public class Main {
     public static void main(String[] args) {
         DBase dBase = new DBase();
         List<String> lst =Handlers.readFile("inpData.txt");
-        Handlers.inputData(lst,dBase);
+        if(lst!=null)
+            Handlers.parserInpData(lst,dBase);
 
     }
 

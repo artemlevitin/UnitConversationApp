@@ -17,7 +17,7 @@ import java.util.List;
             return null;
         }
     }
-    static public void inputData(List<String> inpData, DBase dBase){
+    static public void parserInpData(List<String> inpData, DBase dBase){
         for(String str : inpData){
             String words[] = str.split(" ");
 
@@ -25,32 +25,49 @@ import java.util.List;
             Unit un2 = new Unit();
             un1.setName(words[1]);
             un2.setName(words[4]);
+
             double v1 = Double.valueOf(words[0]);
+
             if(words[3]=="?"){
-                // outputCompute();
+                // outputCompute(un1,un2,dBase);
             }
             else {
-                //  inputToBase();
                 double v2 = Double.valueOf(words[3]);
                 if (v1 < v2) {
                     un2.setVal(v2 / v1);
                 } else
                     un1.setVal(v1 / v2);
 
-                ListUnits cnvLst = new ListUnits();
-                if (un1.getVal() < un2.getVal()) {
-                    cnvLst.units.add(un1);
-                    cnvLst.units.add(un2);
-                } else {
-                    cnvLst.units.add(un2);
-                    cnvLst.units.add(un1);
-                }
-                dBase.base.add(cnvLst);
+                inputToBase(un1,un2,dBase);
+
             }
         }
 
-
-
-
     }
-}
+
+     private static void inputToBase(Unit un1, Unit un2, DBase dBase) {
+         for (ListUnits lu : dBase.listsUn) {
+             if (lu.units.contains(un1) & lu.units.contains(un2)) {
+                lu.units.add(lu.units.indexOf(un1),un1);
+                 return;
+             } else if (lu.units.contains(un1)) {
+                 lu.units.add(lu.units.indexOf(un1),un1);
+                 return;
+             } else if (lu.units.contains(un2)) {
+                 lu.units.add(lu.units.indexOf(un2),un2);
+                 return;
+             }
+         }
+            //Both units are unical, creatig new list units
+                ListUnits lstUn = new ListUnits();
+                if (un1.getVal() < un2.getVal()) {
+                    lstUn.units.add(un1);
+                    lstUn.units.add(un2);
+                } else {
+                    lstUn.units.add(un2);
+                    lstUn.units.add(un1);
+                }
+                dBase.listsUn.add(lstUn);
+
+            }
+  }
