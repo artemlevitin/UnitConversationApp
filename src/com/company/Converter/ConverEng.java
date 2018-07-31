@@ -1,4 +1,4 @@
-package com.company.Handler;
+package com.company.Converter;
 
 import com.company.ConverDBase.DBase;
 import com.company.ConverDBase.ListUnits;
@@ -8,8 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
- public class Handlers {
-    static public List<String> readFile(String filePath) {
+ public class ConverEng {
+     private DBase dBase;
+     public ConverEng(DBase dbase){
+         this.dBase =dbase;
+     }
+     public List<String> readFile(String filePath) {
         try {
             return Files.readAllLines(Paths.get(filePath));
         } catch (Exception exc) {
@@ -17,7 +21,7 @@ import java.util.List;
             return null;
         }
     }
-    static public void parserInpData(List<String> inpData, DBase dBase){
+     public void parserInpData(List<String> inpData){
         for(String str : inpData){
             String words[] = str.split(" ");
 
@@ -38,14 +42,14 @@ import java.util.List;
                 } else
                     un1.setVal(v1 / v2);
 
-                inputToBase(un1,un2,dBase);
+                inputToBase(un1,un2);
 
             }
         }
 
     }
 
-     private static void inputToBase(Unit un1, Unit un2, DBase dBase) {
+     private  void inputToBase(Unit un1, Unit un2) {
          for (ListUnits lu : dBase.listsUn) {
              if (lu.units.contains(un1) & lu.units.contains(un2)) {
                 lu.units.add(lu.units.indexOf(un1),un1);
@@ -70,4 +74,5 @@ import java.util.List;
                 dBase.listsUn.add(lstUn);
 
             }
-  }
+
+      }
