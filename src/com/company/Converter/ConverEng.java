@@ -51,14 +51,22 @@ import java.util.List;
 
      private  void inputToBase(Unit un1, Unit un2) {
          for (ListUnits lu : dBase.listsUn) {
+             int ind1 = lu.units.indexOf(un1);
+             int ind2 = lu.units.indexOf(un2);
+
              if (lu.units.contains(un1) & lu.units.contains(un2)) {
-                lu.units.add(lu.units.indexOf(un1),un1);
+                lu.units.set(ind1,un1);
+                lu.units.set(ind2,un2);
                  return;
-             } else if (lu.units.contains(un1)) {
-                 lu.units.add(lu.units.indexOf(un1),un1);
+             } else if (ind2 > -1) {
+                 lu.units.set(ind2,un2);
+                 lu.units.add(ind2 ,un1);
                  return;
-             } else if (lu.units.contains(un2)) {
-                 lu.units.add(lu.units.indexOf(un2),un2);
+             } else if (ind1 > -1) {
+                 un2.setVal(lu.units.get(ind2).getVal()/un2.getVal());
+                 lu.units.set(ind2,un2);
+                 lu.units.add(ind2,un1);
+
                  return;
              }
          }
