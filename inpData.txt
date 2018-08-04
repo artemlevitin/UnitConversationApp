@@ -1,3 +1,4 @@
 7200.0 second = 2 hour
+10 second = 1000 milisecond
 1 day = 24.0 hour
 1 minute = 60 second

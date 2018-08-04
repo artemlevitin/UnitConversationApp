@@ -58,14 +58,22 @@ import java.util.List;
                 lu.units.set(ind1,un1);
                 lu.units.set(ind2,un2);
                  return;
-             } else if (ind2 > -1) {
-                 lu.units.set(ind2,un2);
-                 lu.units.add(ind2 ,un1);
-                 return;
-             } else if (ind1 > -1) {
-                 un2.setVal(lu.units.get(ind2).getVal()/un2.getVal());
+             }
+             else if (ind2 > -1) {
+
+                 if (ind2 != 0)
+                 {
+                     un2.setVal(lu.units.get(ind2).getVal()/un2.getVal());
+                     un1.setVal(un2.getVal());
+                 }
                  lu.units.set(ind2,un2);
                  lu.units.add(ind2,un1);
+
+                 return;
+             }
+
+             else if (ind1 > -1) {
+                   lu.units.add(un2);
 
                  return;
              }
@@ -84,3 +92,4 @@ import java.util.List;
             }
 
       }
+

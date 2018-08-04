@@ -14,7 +14,7 @@ public class ListUnits {
     {
         String res = "";
         for (Unit un : units) {
-            res += ( un.getName() + " " + un.getVal() +";" );
+            res += ( un.getVal()+ " " + un.getName() + ";" );
         }
         return res ;
     }
