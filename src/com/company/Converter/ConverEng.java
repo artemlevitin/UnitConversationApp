@@ -11,7 +11,7 @@ import java.util.List;
  public class ConverEng {
      private DBase dBase;
      public ConverEng(DBase dbase){
-         this.dBase =dbase;
+         this.setdBase(dbase);
      }
      public List<String> readFile(String filePath) {
         try {
@@ -42,6 +42,13 @@ import java.util.List;
                 } else
                     un1.setVal(v1 / v2);
 
+                //un1 should be val = 1
+            if(un1.getVal() != 1) {
+                Unit tUn = un1;
+                un1=un2;
+                un2=tUn;
+            }
+
                 inputToBase(un1,un2);
 
             }
@@ -50,18 +57,18 @@ import java.util.List;
     }
 
      private  void inputToBase(Unit un1, Unit un2) {
-         for (ListUnits lu : dBase.listsUn) {
+         for (ListUnits lu : getdBase().listsUn) {
              int ind1 = lu.units.indexOf(un1);
              int ind2 = lu.units.indexOf(un2);
 
-             if (lu.units.contains(un1) & lu.units.contains(un2)) {
+             if (ind1 != -1 & ind2 != -1) {
                 lu.units.set(ind1,un1);
                 lu.units.set(ind2,un2);
                  return;
              }
              else if (ind2 > -1) {
 
-                 if (ind2 != 0)
+                 if (ind2 != 0)//before is unit yet
                  {
                      un2.setVal(lu.units.get(ind2).getVal()/un2.getVal());
                      un1.setVal(un2.getVal());
@@ -73,6 +80,11 @@ import java.util.List;
              }
 
              else if (ind1 > -1) {
+                 if(ind1 != lu.units.size()-1) //after is unit yet
+                 {
+                     Unit un3 = lu.units.get(ind1 + 1);
+                     un3.setVal(un3.getVal() / un2.getVal());
+                 }
                    lu.units.add(un2);
 
                  return;
@@ -87,9 +99,16 @@ import java.util.List;
                     lstUn.units.add(un2);
                     lstUn.units.add(un1);
                 }
-                dBase.listsUn.add(lstUn);
+                getdBase().listsUn.add(lstUn);
 
             }
 
-      }
+     public DBase getdBase() {
+         return dBase;
+     }
+
+     public void setdBase(DBase dBase) {
+         this.dBase = dBase;
+     }
+ }
 

@@ -10,5 +10,13 @@ public class DBase {
     listsUn = new ArrayList<ListUnits>();
 
   }
-
+    @Override
+    public String toString()
+    {
+        String res = "";
+        for (ListUnits lUns : listsUn) {
+            res += ( lUns + "\n" );
+        }
+        return res ;
+    }
 }
