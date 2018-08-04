@@ -33,4 +33,10 @@ public class Unit {
 
         return sameSame;
     }
+    @Override
+    public String toString()
+    {
+
+        return name + " " + val ;
+    }
 }
