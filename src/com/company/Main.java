@@ -11,6 +11,8 @@ public class Main {
 
         convEng.parserInpData (convEng.readFile("inpData.txt"));
 
+        convEng.safeResltToFile();
+
 
     }
 

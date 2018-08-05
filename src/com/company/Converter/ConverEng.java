@@ -4,15 +4,21 @@ import com.company.ConverDBase.DBase;
 import com.company.ConverDBase.ListUnits;
 import com.company.ConverDBase.Unit;
 
+import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Formatter;
 
  public class ConverEng {
      private DBase dBase;
+     private ArrayList<String> resultLst;
 
      public ConverEng(DBase dbase) {
          this.setdBase(dbase);
+         resultLst = new ArrayList<String>();
      }
 
      public DBase getdBase() {
@@ -32,6 +38,21 @@ import java.util.List;
          }
      }
 
+     public void safeResltToFile() {
+
+         try {
+             PrintWriter fileWrt = new PrintWriter("CoversResult.txt", "UTF-8");
+             for (String resLn : resultLst) {
+                 if (resLn == null)
+                     resLn = "No conversion is possible";
+                 fileWrt.println(resLn);
+             }
+             fileWrt.close();
+         } catch (Exception exc) {
+             System.out.println(exc.getMessage());
+         }
+     }
+
      public void parserInpData(List<String> inpData) {
          for (String str : inpData) {
              String words[] = str.split(" ");
@@ -45,8 +66,9 @@ import java.util.List;
 
              if ( words[3].equals("?") ) {
                  un1.setVal(v1);
-                 outputCompute(un1, un2);
-             } else {
+                 resultLst.add(outputCompute(un1, un2));
+             }
+             else {
                  double v2 = Double.valueOf(words[3]);
                  if (v1 < v2) {
                      un2.setVal(v2 / v1);
@@ -66,7 +88,6 @@ import java.util.List;
          }
 
      }
-
 
      private void inputToBase(Unit un1, Unit un2) {
          for (ListUnits lu : getdBase().listsUn) {
@@ -116,8 +137,9 @@ import java.util.List;
          for (ListUnits lu : getdBase().listsUn) {
              int ind1 = lu.units.indexOf(un1);
              int ind2 = lu.units.indexOf(un2);
-        String rez= un1 + " ";
+        String rez= String.format("%.6f",un1.getVal()) + " " + un1.getName() + " = ";
         double valRez=un1.getVal();
+
 
              if (ind1 != -1 & ind2 != -1) {
                  if(ind1 < ind2)
@@ -129,11 +151,13 @@ import java.util.List;
                          valRez /= lu.units.get(i).getVal();
                      }
 
-                     rez += valRez + " " + un2.getName();
+                     rez += String.format("%.6e",valRez) + " " + un2.getName();
 
                  return rez;
              }
          }
          return null;
      }
+
+
  }
