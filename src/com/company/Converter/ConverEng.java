@@ -98,24 +98,54 @@ import java.util.Formatter;
                  lu.units.set(ind1, un1);
                  lu.units.set(ind2, un2);
                  return;
-             } else if (ind2 > -1) {
+             }
 
-                 if (ind2 != 0)//before is unit yet
-                 {
-                     un2.setVal(lu.units.get(ind2).getVal() / un2.getVal());
-                     un1.setVal(un2.getVal());
-                 }
+             //Shoud to insert un1, it is bigest un2 wich has been in list
+             else if (ind2 == 0) {
                  lu.units.set(ind2, un2);
                  lu.units.add(ind2, un1);
 
                  return;
-             } else if (ind1 > -1) {
-                 if (ind1 != lu.units.size() - 1) //after is unit yet
-                 {
-                     Unit un3 = lu.units.get(ind1 + 1);
-                     un3.setVal(un3.getVal() / un2.getVal());
+             }
+             else if (ind2 > 0) {
+
+                 int indInst = ind2;// index for install unit
+                 Unit unLess = lu.units.get(indInst);
+                 //going in list to bigest unit with minimal index (ex. from second to year)
+                    while(indInst > 0) {
+                     un1.setVal(un2.getVal());
+                     unLess = lu.units.get(indInst);
+                     if(un1.getVal() > unLess.getVal()) {
+                         un1.setVal(un1.getVal() / unLess.getVal());
+                         --indInst;
+                     }
+                     else
+                     {
+                         double val = un1.getVal();
+                         un1.setVal(unLess.getVal()/un1.getVal());
+                         unLess.setVal(val);
+                         break;
+                     }
                  }
-                 lu.units.add(un2);
+                 lu.units.set(indInst, unLess);
+                 lu.units.add(indInst, un1);
+
+                 return;
+             }
+
+             // If should add  Unit2(un1 has been in list yet)
+             else if (ind1 > -1) {
+                 int indInst= ind1+1;
+
+                 while(indInst <= lu.units.size() - 1) {
+                     Unit unless = lu.units.get(indInst);
+                     if(un2.getVal() < unless.getVal())
+                         break;
+                     un2.setVal(un2.getVal()/unless.getVal());
+                     ++indInst;
+                 }
+
+            lu.units.add(indInst,un2);
 
                  return;
              }
