@@ -1,4 +1,4 @@
-7200.0 second = 2 hour
+7200.0 second = W hour
 10.0 glob = 1 decaglob
 1 day = 24.0 hour
 1 minute = 60 second

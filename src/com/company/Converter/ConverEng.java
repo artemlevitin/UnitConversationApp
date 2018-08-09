@@ -1,4 +1,6 @@
 package com.company.Converter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.company.ConverDBase.DBase;
 import com.company.ConverDBase.ListUnits;
@@ -31,12 +33,21 @@ import java.util.Formatter;
 
      public List<String> readFile(String filePath) {
          try {
-             return Files.readAllLines(Paths.get(filePath));
+             List<String> inpData =   Files.readAllLines(Paths.get(filePath));
+             for(int i=0;i<inpData.size();++i){
+                 if(!(inpData.get(i).contains(" ")))
+                 {
+                     inpData.remove(i);
+                     System.out.println("Error input String №" + i );
+                 }
+             }
+             return inpData;
          } catch (Exception exc) {
              System.out.println(exc.getMessage());
              return null;
          }
      }
+
 
      public void safeResltToFile() {
 
@@ -54,8 +65,18 @@ import java.util.Formatter;
      }
 
      public void parserInpData(List<String> inpData) {
+          int indStr =0;
          for (String str : inpData) {
-             String words[] = str.split(" ");
+
+             String words[] = null;
+             try {
+                 words = checkInpStr(str);
+             }
+             catch (Exception e) {
+                 System.out.println("Error input String №" +indStr +" \"" + str +"\". Detail:" + e.getMessage());
+                 continue;
+             }
+
 
              Unit un1 = new Unit();
              Unit un2 = new Unit();
@@ -81,23 +102,63 @@ import java.util.Formatter;
                      un1 = un2;
                      un2 = tUn;
                  }
-
-                 inputToBase(un1, un2);
-
-             }
+                 try {
+                inputToBase(un1, un2);
+            }
+            catch (Exception exc){
+                System.out.println("Error input String №" +indStr +" \"" + str +"\". Detail:" +exc.getMessage() );
+                 }
+                 ++indStr;
          }
 
      }
+     }
 
-     private void inputToBase(Unit un1, Unit un2) {
-         for (ListUnits lu : getdBase().listsUn) {
+
+
+     private String[] checkInpStr( final String str) throws Exception {
+         String words[] = str.split(" ");
+
+         Pattern pattern = Pattern.compile("[0-9]{1,15}[\\.]{0,1}[0-9]{0,15}");
+         Matcher matcher ;
+         matcher =  pattern.matcher(words[0]);
+         if ( !matcher.matches() ) {
+             throw new Exception("Incorrect parametr 0: " + words[0]);
+         }
+
+         pattern = Pattern.compile("(^[0-9]{1,15}[\\.]{0,1}[0-9]{0,15})|(\\?)");
+         matcher =  pattern.matcher(words[3]);
+         if ( !matcher.matches() ) {
+             throw new Exception("Incorrect parametr 3: " + words[3]);
+         }
+
+         pattern = Pattern.compile("^[a-z]{1,15}");
+         matcher =  pattern.matcher(words[1]);
+         if ( !matcher.matches() ) {
+             throw new Exception("Incorrect parametr 1: " + words[1]);
+         }
+
+         matcher =  pattern.matcher(words[4]);
+         if ( !matcher.matches() ) {
+             throw new Exception("Incorrect parametr 4: " + words[4]);
+         }
+
+         return words;
+     }
+
+     private void inputToBase(Unit un1, Unit un2)throws Exception {
+         for (ListUnits lu : getdBase().listsUn)  {
              int ind1 = lu.units.indexOf(un1);
              int ind2 = lu.units.indexOf(un2);
 
              if (ind1 != -1 & ind2 != -1) {
-                 lu.units.set(ind1, un1);
-                 lu.units.set(ind2, un2);
-                 return;
+                 if(ind1+1 == ind2 ) {
+                     lu.units.set(ind1, un1);
+                     lu.units.set(ind2, un2);
+                     return;
+                 }
+                 else
+                     throw new Exception("Both units has benn in List, between them has other units");
              }
 
              //Shoud to insert un1, it is bigest un2 wich has been in list
